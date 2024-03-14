@@ -16,6 +16,7 @@ export default function App() {
   const [page, setPage] = useState(1);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalImage, setModalImage] = useState({});
+  const [isLoadMore, setIsLoadMore] = useState(true);
 
   useEffect(() => {
     if (searchQuery === "") {
@@ -25,9 +26,13 @@ export default function App() {
     async function fetchImages() {
       try {
         setIsLoading(true);
+        setIsLoadMore(true);
         const images = await axios.get(
           `https://api.unsplash.com/search/photos?client_id=bsgCsyqRc9DRyY2ef_sArTDB-pwvLOhtypbJ1hpGcA8&page=${page}&per_page=8&query=${searchQuery}`
         );
+        if (page === images.data.total_pages) {
+          setIsLoadMore(false);
+        }
         if (page === 1) {
           setResponse(images.data.results);
         } else {
@@ -55,7 +60,7 @@ export default function App() {
   };
 
   const handleLoadMore = () => {
-    setPage(page + 1);
+    setPage((prevPage) => prevPage + 1);
   };
 
   const handleModal = (image) => {
@@ -77,7 +82,7 @@ export default function App() {
         <ImageGallery images={response} handleModal={handleModal} />
       )}
       {isLoading && <Loader />}
-      {response.length > 0 && !isLoading && (
+      {response.length > 0 && !isLoading && isLoadMore && (
         <LoadMoreBtn loadMore={handleLoadMore} />
       )}
       {modalIsOpen && (
