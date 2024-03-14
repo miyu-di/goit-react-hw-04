@@ -1,0 +1,15 @@
+.loadBtn {
+  display: flex;
+  justify-content: center;
+}
+
+.btn {
+    padding: 5px 1px;
+    width: 150px;
+    height: 30px;
+    border-radius: 4px;
+    border: none;
+    background-color: #8ad1ce;
+    color: #fff;
+    cursor: pointer;
+}
